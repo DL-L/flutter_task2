@@ -45,6 +45,24 @@ class Network {
     }
   }
 
+  Future<List<Task>> getAdminTasksData(data, apiUrl) async {
+    try {
+      var response = await SingletonDio.getDio().get(_url + apiUrl,
+          options: Options(headers: {"Authorization": "Bearer $_getToken()"}),
+          queryParameters: data);
+
+      if (response.statusCode == 200) {
+        List<Task> tasks =
+            (response.data as List).map((x) => Task.fromJson(x)).toList();
+        return tasks;
+      } else {
+        return <Task>[];
+      }
+    } catch (error, stacktrace) {
+      throw Exception("Exception occured: $error stacktrace: $stacktrace");
+    }
+  }
+
   Future<List<User>> getPublicData(apiUrl) async {
     try {
       var response = await SingletonDio.getDio().get(_url + apiUrl,

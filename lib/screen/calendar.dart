@@ -8,7 +8,7 @@ import 'package:flutter_task2/screen/edit_task_sub.dart';
 import 'package:flutter_task2/screen/showTask.dart';
 import 'package:flutter_task2/service/api.dart';
 import 'package:flutter_task2/widgets/Cupertino_input_field.dart';
-import 'package:flutter_task2/widgets/build_bottom_sheet.dart';
+import 'package:flutter_task2/widgets/build_bottom_sheet_show_task.dart';
 import 'package:flutter_task2/widgets/dialogue_delete.dart';
 import 'package:flutter_task2/widgets/slidable_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -39,16 +39,18 @@ class _CalendarState extends State<Calendar> {
 
   _getAllTasks() async {
     var res = await Network().getTaskData('/users/tasks').then((tasks) {
-      setState(() {
-        _tasks = tasks;
-        for (var i = 0; i < _tasks.length; i++) {
-          // print(_tasks[i]);
-          _titles.add(_tasks[i].title);
-          // _tasks.add(_tasks[i]);
-        }
+      if (this.mounted) {
+        setState(() {
+          _tasks = tasks;
+          for (var i = 0; i < _tasks.length; i++) {
+            // print(_tasks[i]);
+            _titles.add(_tasks[i].title);
+            // _tasks.add(_tasks[i]);
+          }
 
-        // _titles = _tasks.map((e) => e.title).toList();
-      });
+          // _titles = _tasks.map((e) => e.title).toList();
+        });
+      }
     });
     return _tasks;
   }
@@ -323,7 +325,9 @@ class _CalendarState extends State<Calendar> {
                               width: MediaQuery.of(context).size.width - 64.0,
                               padding: EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: _isItTodo(index)
+                                    ? Color(0xff9966cc)
+                                    : Color(0xffcc9966),
                                 border: Border.all(
                                     color: _isItTodo(index)
                                         ? Color(0xff9966cc)
@@ -335,7 +339,7 @@ class _CalendarState extends State<Calendar> {
                                 task.title + '$index',
                                 style: GoogleFonts.roboto(
                                     textStyle: TextStyle(
-                                        color: Colors.black,
+                                        color: Colors.white,
                                         fontSize: 23,
                                         fontWeight: FontWeight.w400)),
                               ),

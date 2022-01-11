@@ -153,7 +153,7 @@ class _LoginState extends State<Login> {
                                 onPressed: () {
                                   _isLoading ? null : _handleLogin();
                                 },
-                                color: Colors.black.withOpacity(0.9),
+                                color: Colors.deepPurple.withOpacity(0.9),
                                 shape: const RoundedRectangleBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(14))),

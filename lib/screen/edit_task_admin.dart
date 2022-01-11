@@ -22,7 +22,7 @@ class EditTaskAdmin extends StatefulWidget {
 class _EditTaskAdminState extends State<EditTaskAdmin> {
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  late DateTime _date = widget.task.deadline!;
+  late DateTime _date = widget.task.deadline ?? DateTime.now();
 
   // @override
   // void initState() {
