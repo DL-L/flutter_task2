@@ -4,8 +4,13 @@ import 'package:flutter_task2/models/Task.dart';
 import 'package:flutter_task2/models/User.dart';
 import 'package:flutter_task2/models/Users.dart';
 import 'package:flutter_task2/screen/edit_task_admin.dart';
+import 'package:flutter_task2/screen/edit_task_sub.dart';
+import 'package:flutter_task2/screen/history.dart';
 import 'package:flutter_task2/service/api.dart';
 import 'package:flutter_task2/widgets/Cupertino_input_field.dart';
+import 'package:flutter_task2/widgets/comment_tile.dart';
+import 'package:flutter_task2/widgets/prefix_button.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
@@ -23,8 +28,29 @@ class BuildBottomSheet extends StatefulWidget {
 class _BuildBottomSheetState extends State<BuildBottomSheet> {
   User1? _user1;
   User1? _user2;
+  Task? _task;
   late Future data1;
   late Future data2;
+  bool _beforeShowTask = true;
+
+  _showTask() async {
+    if (mounted) {
+      setState(() {
+        _beforeShowTask = true;
+      });
+    }
+    var res =
+        await Network().showTaskData('/tasks/${widget.task.id}').then((task) {
+      setState(() {
+        _task = task;
+        _beforeShowTask = false;
+      });
+    });
+    // setState(() {
+    //   _beforeShowTask = false;
+    // });
+    return _task;
+  }
 
   _getUserSub() async {
     var res = await Network()
@@ -55,6 +81,9 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
     data2 = _getUserAdmin();
     _user1;
     _user2;
+    _showTask();
+    _task;
+    _beforeShowTask = true;
   }
 
   @override
@@ -76,17 +105,39 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
                     Navigator.of(context).pop();
                   },
                 ),
-                IconButton(
-                  icon: Icon(CupertinoIcons.pen),
-                  color: Colors.black,
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.push(
-                        context,
-                        new MaterialPageRoute(
-                            builder: (context) =>
-                                EditTaskAdmin(task: widget.task)));
-                  },
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.history),
+                          color: Colors.black,
+                          onPressed: () {
+                            Get.to(() => HistoryTask(
+                                  task: widget.task,
+                                ));
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(CupertinoIcons.pen),
+                          color: Colors.black,
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => !widget.isItTodo
+                                    ? EditTaskAdmin(task: widget.task)
+                                    : EditTaskSub(
+                                        task: widget.task,
+                                      ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    )
+                  ],
                 ),
               ],
             ),
@@ -140,7 +191,8 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
                   inputtype: null,
                   maxlines: 1,
                   minlines: 1,
-                  placeHolder: widget.task.title,
+                  placeHolder:
+                      _task?.title == null ? widget.task.title : _task?.title,
                   prefix: Container(
                     height: 17,
                     width: 17,
@@ -176,7 +228,9 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
                   inputtype: null,
                   maxlines: null,
                   minlines: null,
-                  placeHolder: widget.task.description,
+                  placeHolder: _task?.description == null
+                      ? widget.task.description
+                      : _task?.description,
                   prefix: Container(child: Icon(CupertinoIcons.text_alignleft)),
                   holderStyle: GoogleFonts.roboto(
                       textStyle: TextStyle(
@@ -204,7 +258,11 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
                   inputtype: null,
                   maxlines: 1,
                   minlines: 1,
-                  placeHolder: widget.task.status.name,
+                  placeHolder: _beforeShowTask
+                      ?
+                      // _task?.status.name == null?
+                      widget.task.status.name
+                      : _task?.status.name,
                   prefix: Container(
                     height: 17,
                     width: 17,
@@ -240,17 +298,25 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
                       width: MediaQuery.of(context).size.width,
                       padding: const EdgeInsets.only(top: 8.0, left: 50),
                       child: Text(
-                        DateFormat.E().format(
-                                widget.task.deadline ?? DateTime.now()) +
+                        DateFormat.E().format((_task?.deadline == null
+                                    ? widget.task.deadline
+                                    : _task?.deadline) ??
+                                DateTime.now()) +
                             ', ' +
-                            DateFormat.LLL().format(
-                                widget.task.deadline ?? DateTime.now()) +
+                            DateFormat.LLL().format((_task?.deadline == null
+                                    ? widget.task.deadline
+                                    : _task?.deadline) ??
+                                DateTime.now()) +
                             ' ' +
-                            DateFormat.d().format(
-                                widget.task.deadline ?? DateTime.now()) +
+                            DateFormat.d().format((_task?.deadline == null
+                                    ? widget.task.deadline
+                                    : _task?.deadline) ??
+                                DateTime.now()) +
                             ', ' +
-                            DateFormat.y()
-                                .format(widget.task.deadline ?? DateTime.now()),
+                            DateFormat.y().format((_task?.deadline == null
+                                    ? widget.task.deadline
+                                    : _task?.deadline) ??
+                                DateTime.now()),
                         style: GoogleFonts.roboto(
                             textStyle: TextStyle(
                                 fontSize: 18,
@@ -260,6 +326,27 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
                     )
                   ],
                 ),
+                Divider(),
+                ExpansionTile(
+                    initiallyExpanded: true,
+                    title: PrefixButton(
+                        icon: Icon(Icons.comment_outlined), text: 'Comments'),
+                    children: [
+                      ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: widget.task.comments.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          Comment comment = widget.task.comments[index];
+                          return CommentTile(
+                            text: comment.body,
+                            seen: _beforeShowTask
+                                ? comment.seen
+                                : _task?.comments[index].seen,
+                          );
+                        },
+                      ),
+                    ])
               ],
             )),
           ),

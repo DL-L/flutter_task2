@@ -30,7 +30,7 @@ class Task {
   DateTime? deadline;
   List<Comment> comments;
   Relation relation;
-  dynamic? createdAt;
+  DateTime? createdAt;
   DateTime? updatedAt;
 
   factory Task.fromJson(Map<String, dynamic> json) => Task(
@@ -43,7 +43,9 @@ class Task {
         comments: List<Comment>.from(
             json["comments"].map((x) => Comment.fromJson(x))),
         relation: Relation.fromJson(json["relation"]),
-        createdAt: json["created_at"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
         updatedAt: json["updated_at"] == null
             ? null
             : DateTime.parse(json["updated_at"]),
@@ -59,7 +61,7 @@ class Task {
             : "${deadline!.year.toString().padLeft(4, '0')}-${deadline!.month.toString().padLeft(2, '0')}-${deadline!.day.toString().padLeft(2, '0')}",
         "comments": List<dynamic>.from(comments.map((x) => x.toJson())),
         "relation": relation.toJson(),
-        "created_at": createdAt,
+        "created_at": createdAt == null ? null : createdAt!.toIso8601String(),
         "updated_at": updatedAt == null ? null : updatedAt!.toIso8601String(),
       };
 }

@@ -177,7 +177,7 @@ class _EditTaskAdminState extends State<EditTaskAdmin> {
                   onTap: () {
                     null;
                     _updateTask();
-                    Get.to(Home());
+                    Get.to(() => Home());
                   })
             ],
           ),
@@ -207,14 +207,17 @@ class _EditTaskAdminState extends State<EditTaskAdmin> {
 
   void _updateTask() async {
     var data = {
-      'title': titleController.text,
-      'description': descriptionController.text,
+      'title': titleController.text.isEmpty
+          ? widget.task.title
+          : titleController.text,
+      'description': descriptionController.text.isEmpty
+          ? widget.task.description
+          : descriptionController.text,
       'deadline': _date.toString()
     };
 
     var res =
         await Network().updateTaskAdmin(data, '/admin/tasks/${widget.task.id}');
-
     print(res);
   }
 }

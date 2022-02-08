@@ -22,7 +22,6 @@ class User {
     this.createdAt,
     this.updatedAt,
     this.deletedAt,
-    required this.pivot,
   });
 
   int id;
@@ -35,7 +34,6 @@ class User {
   dynamic createdAt;
   dynamic updatedAt;
   dynamic deletedAt;
-  Pivot pivot;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
@@ -48,7 +46,6 @@ class User {
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
         deletedAt: json["deleted_at"],
-        pivot: Pivot.fromJson(json["pivot"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -62,26 +59,5 @@ class User {
         "created_at": createdAt,
         "updated_at": updatedAt,
         "deleted_at": deletedAt,
-        "pivot": pivot.toJson(),
-      };
-}
-
-class Pivot {
-  Pivot({
-    required this.subId,
-    required this.adminId,
-  });
-
-  int subId;
-  int adminId;
-
-  factory Pivot.fromJson(Map<String, dynamic> json) => Pivot(
-        subId: json["sub_id"],
-        adminId: json["admin_id"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "sub_id": subId,
-        "admin_id": adminId,
       };
 }

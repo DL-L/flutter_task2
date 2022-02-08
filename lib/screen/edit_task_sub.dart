@@ -1,13 +1,23 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
+import 'package:flutter_task2/models/Task.dart';
+import 'package:flutter_task2/models/notifiers.dart';
 import 'package:flutter_task2/screen/Home.dart';
+import 'package:flutter_task2/service/api.dart';
+import 'package:flutter_task2/widgets/Cupertino_input_field.dart';
 import 'package:flutter_task2/widgets/button.dart';
+import 'package:flutter_task2/widgets/comment_tile.dart';
+import 'package:flutter_task2/widgets/prefix_button.dart';
 import 'package:flutter_task2/widgets/sound_recorder.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class EditTaskSub extends StatefulWidget {
-  const EditTaskSub({Key? key}) : super(key: key);
+  final Task task;
+  const EditTaskSub({required this.task, Key? key}) : super(key: key);
 
   @override
   _EditTaskSubState createState() => _EditTaskSubState();
@@ -15,6 +25,32 @@ class EditTaskSub extends StatefulWidget {
 
 class _EditTaskSubState extends State<EditTaskSub> {
   final recoder = SoundRecorder();
+  List<Status> _statuses = [];
+  String _statusValue = '';
+  bool _unachieved = false;
+  TextEditingController commentController = TextEditingController();
+  bool _editMode = false;
+
+  _getStatuses() {
+    var res = Network().getStatuses('/statuses').then((statuses) {
+      setState(() {
+        _statuses = statuses;
+        print(_statuses);
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getStatuses();
+    _statuses;
+    _statusValue = widget.task.status.name;
+    if (widget.task.status.name == 'unachieved') {
+      _unachieved = true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,10 +64,97 @@ class _EditTaskSubState extends State<EditTaskSub> {
         panel: Container(
           padding: const EdgeInsets.only(top: 100),
           child: SingleChildScrollView(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [Center(child: buildStart())],
-          )),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: Text(
+                    widget.task.title.toUpperCase(),
+                    style: GoogleFonts.roboto(
+                        textStyle: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey[800])),
+                  ),
+                ),
+                Divider(
+                  color: Colors.grey[600],
+                ),
+                GestureDetector(
+                    child: PrefixButton(
+                      icon: Icon(Icons.task_alt),
+                      text: _statusValue,
+                    ),
+                    onTap: () {
+                      _showSingleChoiceDialog(context);
+                    }),
+                Divider(),
+                _unachieved == true
+                    ? CupertinoField(
+                        controller: commentController,
+                        expands: true,
+                        inputtype: TextInputType.multiline,
+                        maxlines: null,
+                        minlines: null,
+                        placeHolder: 'Write your comment...',
+                        prefix: Container(
+                            child: Icon(CupertinoIcons.text_alignleft)),
+                        holderStyle: GoogleFonts.roboto(
+                            textStyle: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.grey[700])),
+                        inputAction: TextInputAction.newline,
+                        suffix: null,
+                        readOnly: false,
+                      )
+                    : SizedBox.shrink(),
+                // Divider(),
+                // ExpansionTile(
+                //   title: PrefixButton(
+                //       icon: Icon(Icons.comment_outlined), text: 'Comment'),
+                //   children: [
+                //     ListView.builder(
+                //       scrollDirection: Axis.vertical,
+                //       shrinkWrap: true,
+                //       itemCount: widget.task.comments.length,
+                //       itemBuilder: (BuildContext context, int index) {
+                //         Comment comment = widget.task.comments[index];
+                //         return GestureDetector(
+                //           child: CupertinoField(
+                //               controller: commentController,
+                //               prefix: null,
+                //               expands: true,
+                //               maxlines: null,
+                //               minlines: null,
+                //               inputtype: TextInputType.multiline,
+                //               holderStyle: GoogleFonts.roboto(
+                //                   textStyle: TextStyle(
+                //                       fontSize: 17,
+                //                       fontWeight: FontWeight.w400,
+                //                       color: Colors.grey[700])),
+                //               placeHolder: comment.body,
+                //               inputAction: null,
+                //               suffix: null,
+                //               readOnly: _editMode ? false : true),
+                //           onTap: () {
+                //             _editMode = true;
+                //             setState(() {
+                //               _editMode = true;
+                //             });
+                //             print(_editMode);
+                //           },
+                //         );
+                //       },
+                //     ),
+                //   ],
+                // )
+              ],
+            ),
+          ),
         ),
         body: Center(
           child: Text("This is the Widget behind the sliding panel"),
@@ -39,6 +162,49 @@ class _EditTaskSubState extends State<EditTaskSub> {
       ),
     );
   }
+
+  _showSingleChoiceDialog(BuildContext context) => Future.delayed(
+        Duration.zero,
+        () async {
+          showDialog(
+            context: context,
+            builder: (context) {
+              final _singleNotifier = Provider.of<SingleNotifier>(context);
+              return AlertDialog(
+                content: SingleChildScrollView(
+                  child: Container(
+                    width: double.infinity,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: _statuses
+                          .getRange(3, 7)
+                          .map((e) => RadioListTile(
+                                title: Text(e.name),
+                                value: e.name,
+                                groupValue: _singleNotifier.currentStatus,
+                                selected: _singleNotifier.currentStatus == e,
+                                onChanged: (value) {
+                                  if (value.toString() == 'unachieved') {
+                                    _unachieved = true;
+                                  } else {
+                                    _unachieved = false;
+                                  }
+                                  _singleNotifier
+                                      .updateStatus(value.toString());
+                                  Navigator.of(context).pop();
+                                  _statusValue = value.toString();
+                                  setState(() {});
+                                },
+                              ))
+                          .toList(),
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      );
 
   _header() {
     return Column(
@@ -72,9 +238,10 @@ class _EditTaskSubState extends State<EditTaskSub> {
                   label: 'Save',
                   color: Color(0xff915c83),
                   onTap: () {
-                    null;
-                    // _addTask();
-                    // Get.to(Home());
+                    _updateTask();
+                    _editMode = false;
+                    // setState(() {});
+                    Get.to(() => Home());
                   })
             ],
           ),
@@ -93,5 +260,18 @@ class _EditTaskSubState extends State<EditTaskSub> {
         label: Text(text,
             style:
                 GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.bold)));
+  }
+
+  void _updateTask() async {
+    var data = {
+      'status_name': _statusValue,
+      'body': commentController.text,
+    };
+    print(data);
+    var res =
+        await Network().updateTaskSub(data, '/sub/tasks/${widget.task.id}');
+
+    print(res);
+    setState(() {});
   }
 }

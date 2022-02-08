@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
+import 'package:flutter_task2/echo/socket/socket_io.dart';
 import 'package:flutter_task2/models/Users.dart';
 import 'package:flutter_task2/screen/Home.dart';
 import 'package:flutter_task2/service/api.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_task2/widgets/input_field.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:laravel_echo/laravel_echo.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class AddTask extends StatefulWidget {
@@ -342,6 +344,9 @@ class _AddTaskState extends State<AddTask> {
       );
 
   void _addTask() async {
+    initSocketIOClient().private('task.created').listen('ActionEvent', (e) {
+      print(e);
+    });
     var data = {
       'sub_user': _selectedUser,
       'title': titleController.text,
@@ -353,5 +358,8 @@ class _AddTaskState extends State<AddTask> {
     var res = await Network().postData(data, '/tasks');
     print('dalal');
     print(res);
+    initSocketIOClient().private('task.created').listen('ActionEvent', (e) {
+      print(e);
+    });
   }
 }

@@ -21,7 +21,9 @@ class _OtpState extends State<Otp> {
 
   void _onKeyboardTap(String value) {
     setState(() {
-      text = text + value;
+      if (text.length < 6) {
+        text = text + value;
+      }
     });
   }
 
@@ -31,22 +33,31 @@ class _OtpState extends State<Otp> {
         height: 40,
         width: 40,
         decoration: BoxDecoration(
-            border: Border.all(color: Colors.black, width: 0),
-            borderRadius: const BorderRadius.all(Radius.circular(8))),
+          border: Border.all(color: Colors.black, width: 0),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(8),
+          ),
+        ),
         child: Center(
-            child: Text(text[position],
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                ))),
+          child: Text(
+            text[position],
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20,
+            ),
+          ),
+        ),
       );
     } catch (e) {
       return Container(
         height: 40,
         width: 40,
         decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade600, width: 0),
-            borderRadius: const BorderRadius.all(Radius.circular(8))),
+          border: Border.all(color: Colors.grey.shade600, width: 0),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(8),
+          ),
+        ),
       );
     }
   }
@@ -60,19 +71,21 @@ class _OtpState extends State<Otp> {
           icon: Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(20)),
-              color: Colors.black,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(20),
+              ),
+              color: Colors.white,
             ),
             child: Icon(
               Icons.arrow_back_ios,
-              color: Colors.white,
+              color: Color(0xff4338CA),
               size: 16,
             ),
           ),
           onPressed: () => Navigator.of(context).pop(),
         ),
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xff4338CA),
       ),
       body: SafeArea(
         child: Column(
@@ -92,7 +105,7 @@ class _OtpState extends State<Otp> {
                             child: Text(
                                 'Enter 6 digits verification code sent to your number',
                                 style: GoogleFonts.montserrat(
-                                    color: Colors.black,
+                                    color: Color(0xff4338CA),
                                     fontSize: 26,
                                     fontWeight: FontWeight.w500))),
                         Container(
@@ -120,7 +133,7 @@ class _OtpState extends State<Otp> {
                     constraints: const BoxConstraints(maxWidth: 500),
                     child: RaisedButton(
                       onPressed: _isLoading ? null : _handleLogin,
-                      color: Colors.black,
+                      color: Color(0xff4338CA),
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(14))),
                       child: Container(
@@ -143,7 +156,7 @@ class _OtpState extends State<Otp> {
                               ),
                               child: Icon(
                                 Icons.arrow_forward_ios,
-                                color: Colors.black,
+                                color: Color(0xff4338CA),
                                 size: 16,
                               ),
                             )
@@ -154,7 +167,7 @@ class _OtpState extends State<Otp> {
                   ),
                   NumericKeyboard(
                     onKeyboardTap: _onKeyboardTap,
-                    textColor: Colors.black,
+                    textColor: Color(0xff4338CA),
                     rightIcon: Icon(
                       Icons.backspace,
                       color: Colors.grey,

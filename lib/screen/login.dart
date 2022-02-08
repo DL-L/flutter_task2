@@ -71,7 +71,7 @@ class _LoginState extends State<Login> {
                           child: Text('Sign Up',
                               style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(
-                                      color: Colors.black,
+                                      color: Color(0xff4338CA),
                                       fontSize: 30,
                                       fontWeight: FontWeight.w600))))
                     ],
@@ -101,7 +101,7 @@ class _LoginState extends State<Login> {
                             ]),
                           )),
                       Form(
-                        autovalidateMode: AutovalidateMode.always,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
                         key: formKey,
                         child: Column(
                           children: [
@@ -112,11 +112,14 @@ class _LoginState extends State<Login> {
                                   horizontal: 20, vertical: 5),
                               child: CupertinoTextFormFieldRow(
                                 validator: (value) {
-                                  if (value!.isEmpty ||
-                                      !RegExp(r'^(?:[6,7]9)?$')
-                                          .hasMatch(value)) {
-                                  } else {
+                                  if (value != null
+                                      // ||
+                                      //     !RegExp(r'^(?:[6,7]9)?$')
+                                      //         .hasMatch(value!)
+                                      ) {
                                     return null;
+                                  } else {
+                                    return 'Enter a valid phone number';
                                   }
                                 },
                                 prefix: DropdownButton<String>(
@@ -151,9 +154,13 @@ class _LoginState extends State<Login> {
                               constraints: const BoxConstraints(maxWidth: 500),
                               child: RaisedButton(
                                 onPressed: () {
-                                  _isLoading ? null : _handleLogin();
+                                  final isValidForm =
+                                      formKey.currentState!.validate();
+                                  if (isValidForm) {
+                                    _isLoading ? null : _handleLogin();
+                                  }
                                 },
-                                color: Colors.deepPurple.withOpacity(0.9),
+                                color: Color(0xff4338CA).withOpacity(0.9),
                                 shape: const RoundedRectangleBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(14))),

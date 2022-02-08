@@ -4,6 +4,7 @@ import 'package:flutter_task2/screen/Subordinate.dart';
 import 'package:flutter_task2/screen/addTaskBottomSheet.dart';
 import 'package:flutter_task2/screen/admin.dart';
 import 'package:flutter_task2/screen/calendar.dart';
+import 'package:flutter_task2/screen/invitation_page.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class _HomeState extends State<Home> {
     Admin(),
     AddTask(),
     Subordinate(),
-    Calendar(),
+    InvitationPage(),
   ];
 
   @override
