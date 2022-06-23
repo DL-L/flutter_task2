@@ -5,7 +5,6 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_task2/models/Task.dart';
 import 'package:flutter_task2/screen/Home.dart';
 import 'package:flutter_task2/screen/edit_task_sub.dart';
-import 'package:flutter_task2/screen/showTask.dart';
 import 'package:flutter_task2/service/api.dart';
 import 'package:flutter_task2/widgets/Cupertino_input_field.dart';
 import 'package:flutter_task2/widgets/build_bottom_sheet_show_task.dart';
@@ -16,8 +15,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-// import 'package:flutter_task2/widgets/side_header_list_view.dart';
-// import 'package:side_header_list_view/side_header_list_view.dart';
 
 typedef bool HasSameHeader(int a, int b);
 
@@ -142,26 +139,15 @@ class _CalendarState extends State<Calendar> {
                         );
                       } else {
                         return Center(
-                            child: SpinKitRotatingPlain(
-                          color: Color(0xff665C84),
-                        ));
+                          child: SpinKitRotatingPlain(
+                            color: Color(0xff665C84),
+                          ),
+                        );
                       }
                     }),
                 new ListView.builder(
                     padding: EdgeInsets.all(16.0),
                     itemCount: _tasks.length,
-                    // itemExtent: 60,
-                    // prototypeItem: SizedBox(
-                    //   height: 50,
-                    // ),
-                    // separatorBuilder: (BuildContext context, int index) =>
-                    //     hasSameHeader(index, index + 1)
-                    //         ? SizedBox(
-                    //             height: 5,
-                    //           )
-                    //         : SizedBox(
-                    //             height: 25,
-                    //           ),
                     controller: _getScrollController(),
                     itemBuilder: (BuildContext context, int index) {
                       return Row(
@@ -185,7 +171,6 @@ class _CalendarState extends State<Calendar> {
   }
 
   bool hasSameHeader(int a, int b) {
-    // print(_titles);
     Task task1 = _tasks[a];
     Task task2 = _tasks[b];
     return task1.deadline == task2.deadline;
@@ -284,12 +269,6 @@ class _CalendarState extends State<Calendar> {
           if (snapshot.hasData) {
             return Column(
               children: [
-                // AnimationConfiguration.staggeredList(
-                //   position: index,
-                //   duration: const Duration(milliseconds: 375),
-                //   child: SlideAnimation(
-                //     child: FadeInAnimation(
-                // child:
                 VisibilityDetector(
                   key: Key(index.toString()),
                   onVisibilityChanged: (visibilityInfo) {
@@ -315,11 +294,6 @@ class _CalendarState extends State<Calendar> {
                   },
                   child: GestureDetector(
                     onTap: () {
-                      // if (!_isItTodo(index)) {
-                      //   null;
-                      // } else {
-                      //   bottomSheet(context, task);
-                      // }
                       bottomSheet(context, task, index, _isItTodo(index));
                     },
                     child: SlidableWidget(
@@ -344,7 +318,6 @@ class _CalendarState extends State<Calendar> {
                       },
                       background: buildBackground(index),
                       child: Container(
-                        // height: 60,
                         width: MediaQuery.of(context).size.width - 64.0,
                         padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
@@ -359,7 +332,7 @@ class _CalendarState extends State<Calendar> {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: Text(
-                          task.title + '$index',
+                          task.title,
                           style: GoogleFonts.roboto(
                               textStyle: TextStyle(
                                   color: Colors.white,
@@ -381,7 +354,9 @@ class _CalendarState extends State<Calendar> {
               ],
             );
           } else {
-            return ShimmerWidget.rectangular(
+            return
+                // LinearProgressIndicator();
+                ShimmerWidget.rectangular(
               width: MediaQuery.of(context).size.width - 64.0,
               height: 37,
               isCircularShape: false,
@@ -433,49 +408,4 @@ class _CalendarState extends State<Calendar> {
     var res = await Network().DeleteTask(taskId);
     print(res);
   }
-
-  // Widget buildShimmer() {
-  //   return SafeArea(
-  //     child: ListView.builder(
-  //         itemCount: 10,
-  //         itemBuilder: (BuildContext context, index) {
-  //           return Row(
-  //             children: [
-  //               Column(
-  //                 children: [
-  //                   ShimmerWidget.rectangular(
-  //                     height: 10,
-  //                     width: 30,
-  //                     isCircularShape: false,
-  //                   ),
-  //                   SizedBox(
-  //                     height: 7,
-  //                   ),
-  //                   ShimmerWidget.circular(
-  //                     width: 30,
-  //                     height: 30,
-  //                     isCircularShape: true,
-  //                   ),
-  //                   SizedBox(
-  //                     height: 25,
-  //                   )
-  //                 ],
-  //               ),
-  //               SizedBox(
-  //                 width: 7,
-  //               ),
-  //               ShimmerWidget.rectangular(
-  //                 width: MediaQuery.of(context).size.width - 64.0,
-  //                 height: 50,
-  //                 isCircularShape: false,
-  //               )
-  //             ],
-  //           );
-  //           // ListTile(
-  //           //   title: ShimmerWidget.rectangular(height: 16),
-  //           //   leading: ShimmerWidget.circular(width: 30, height: 30),
-  //           // );
-  //         }),
-  //   );
-  // }
 }

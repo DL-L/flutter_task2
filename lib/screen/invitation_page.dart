@@ -9,22 +9,11 @@ class InvitationPage extends StatefulWidget {
   _InvitationPageState createState() => _InvitationPageState();
 }
 
-class _InvitationPageState extends State<InvitationPage>
-// with SingleTickerProviderStateMixin
-{
-  // late TabController _tabController;
-
+class _InvitationPageState extends State<InvitationPage> {
   @override
   void initState() {
-    // _tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
-
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   _tabController.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {

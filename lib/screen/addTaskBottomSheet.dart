@@ -196,19 +196,6 @@ class _AddTaskState extends State<AddTask> {
                     items: _username.map(buildMenuItem).toList(),
                   )),
             ),
-            // SizedBox(
-            //   height: 400,
-            //   child: CupertinoPicker(
-            //     // looping: true,
-            //     itemExtent: 64,
-            //     onSelectedItemChanged: (index) {
-            //       setState(() {
-            //         index = index;
-            //       });
-            //     },
-            //     children: _users.map((e) => buildItem(context, e)).toList(),
-            //   ),
-            // ),
           ],
         )),
       ),
@@ -217,53 +204,6 @@ class _AddTaskState extends State<AddTask> {
       ),
     );
   }
-
-  // Container buildItem(BuildContext context, User user) {
-  //   return Container(
-  //     width: MediaQuery.of(context).size.width,
-  //     height: 75,
-  //     padding: const EdgeInsets.all(15.0),
-  //     decoration: BoxDecoration(
-  //       color: Colors.white,
-  //       borderRadius: BorderRadius.circular(12.5),
-  //       boxShadow: [
-  //         BoxShadow(
-  //             offset: const Offset(10, 20),
-  //             blurRadius: 10,
-  //             spreadRadius: 0,
-  //             color: Colors.grey.withOpacity(.05)),
-  //       ],
-  //     ),
-  //     child: Row(
-  //       children: [
-  //         ClipOval(
-  //             child: Image.network(
-  //                 'https://static.vecteezy.com/system/resources/previews/000/649/115/original/user-icon-symbol-sign-vector.jpg',
-  //                 height: 59,
-  //                 fit: BoxFit.cover)),
-  //         const SizedBox(
-  //           width: 15,
-  //         ),
-  //         Text(user.email,
-  //             textAlign: TextAlign.center,
-  //             style: const TextStyle(
-  //               color: Colors.black,
-  //               fontWeight: FontWeight.bold,
-  //               fontSize: 18,
-  //             )),
-  //         const Spacer(),
-  //         Text(
-  //           user.phoneNumber,
-  //           textAlign: TextAlign.center,
-  //           style: const TextStyle(
-  //               color: Colors.grey,
-  //               fontWeight: FontWeight.normal,
-  //               fontSize: 12),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 
   Widget _header() {
     return Column(
@@ -344,9 +284,6 @@ class _AddTaskState extends State<AddTask> {
       );
 
   void _addTask() async {
-    initSocketIOClient().private('task.created').listen('ActionEvent', (e) {
-      print(e);
-    });
     var data = {
       'sub_user': _selectedUser,
       'title': titleController.text,
@@ -358,8 +295,5 @@ class _AddTaskState extends State<AddTask> {
     var res = await Network().postData(data, '/tasks');
     print('dalal');
     print(res);
-    initSocketIOClient().private('task.created').listen('ActionEvent', (e) {
-      print(e);
-    });
   }
 }

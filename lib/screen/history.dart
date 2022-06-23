@@ -25,15 +25,6 @@ class _HistoryTaskState extends State<HistoryTask> {
     'validated'
   ];
 
-  // _getStatuses() {
-  //   var res = Network().getStatuses('/statuses').then((statuses) {
-  //     setState(() {
-  //       _statuses = statuses;
-  //       print(_statuses);
-  //     });
-  //   });
-  // }
-
   _getHistories() async {
     var data = {
       'id_task': widget.task.id,
@@ -53,7 +44,6 @@ class _HistoryTaskState extends State<HistoryTask> {
     super.initState();
     _getHistories();
     _histories;
-    // _getStatuses();
     _statuses;
   }
 

@@ -20,8 +20,8 @@ class SingletonDio {
         },
       ),
     );
-    dio.options.connectTimeout = 10000;
-    dio.options.receiveTimeout = 10000;
+    dio.options.connectTimeout = 90000;
+    dio.options.receiveTimeout = 90000;
     dio.interceptors.add(cookiemanager);
     return dio;
   }

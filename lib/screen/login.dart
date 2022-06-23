@@ -112,14 +112,11 @@ class _LoginState extends State<Login> {
                                   horizontal: 20, vertical: 5),
                               child: CupertinoTextFormFieldRow(
                                 validator: (value) {
-                                  if (value != null
-                                      // ||
-                                      //     !RegExp(r'^(?:[6,7]9)?$')
-                                      //         .hasMatch(value!)
-                                      ) {
-                                    return null;
-                                  } else {
+                                  if (value == null ||
+                                      !RegExp(r'^[0-9]{9}$').hasMatch(value)) {
                                     return 'Enter a valid phone number';
+                                  } else {
+                                    return null;
                                   }
                                 },
                                 prefix: DropdownButton<String>(
@@ -141,7 +138,6 @@ class _LoginState extends State<Login> {
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(4))),
                                 controller: phoneController,
-                                // clearButtonMode: OverlayVisibilityMode.editing,
                                 keyboardType: TextInputType.phone,
                                 maxLines: 1,
                                 placeholder: '...',
@@ -223,8 +219,6 @@ class _LoginState extends State<Login> {
     var data = {
       'phone_num': phoneController.text,
     };
-    print(phoneController.text);
-    print('object');
     var res = await Network().postData(data, '/user/validate');
     print(res);
     try {
@@ -233,12 +227,13 @@ class _LoginState extends State<Login> {
         var user = res.data['user'];
         var userDecode = json.encode(user);
         // print(userDecode);
-        localStorage.setString('user', userDecode);
-        localStorage.setString('code', res.data['code_session'].toString());
+        localStorage.setString('user1', userDecode);
 
-        var userJson = localStorage.getString('user');
+        var userJson = localStorage.getString('user1');
         var user2 = json.decode(userJson!);
-        // print(user2['id']);
+        var connected_user_id = user['id'];
+        localStorage.setInt('connectedUserId', connected_user_id);
+        var test = localStorage.getInt('connectedUserId');
         Navigator.push(
             context, new MaterialPageRoute(builder: (context) => Otp()));
       }

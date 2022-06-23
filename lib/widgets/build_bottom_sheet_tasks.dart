@@ -88,34 +88,6 @@ class _BuildBottomSheetTasksState extends State<BuildBottomSheetTasks> {
               itemBuilder: (BuildContext context, int index) {
                 Task task = widget.isItAdmin ? _tasks[index] : _tasks2[index];
                 return TaskTile(task, widget.isItAdmin);
-                // ListTile(
-                //   contentPadding:
-                //       EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                //   leading: Container(
-                //     padding: EdgeInsets.only(right: 12.0),
-                //     decoration: new BoxDecoration(
-                //         border: new Border(
-                //             right: new BorderSide(
-                //                 width: 1.0, color: Colors.black45))),
-                //     child: Text,
-                //   ),
-                //   title: Text(
-                //     task.title,
-                //     style: TextStyle(
-                //         color: Colors.black, fontWeight: FontWeight.bold),
-                //   ),
-                //   subtitle: Text(
-                //     task.title,
-                //     style: TextStyle(
-                //         color: Colors.white, fontWeight: FontWeight.bold),
-                //   ),
-                //   trailing: Icon(Icons.keyboard_arrow_right,
-                //       color: Colors.white, size: 30.0),
-                //   onTap: () {
-                //     // Navigator.push(context,
-                //     //     MaterialPageRoute(builder: (context) => DetailPage()));
-                //   },
-                // );
               },
             )
           ],

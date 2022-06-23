@@ -26,19 +26,10 @@ class InputField extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Text(title!,
-          //     style: GoogleFonts.lato(
-          //         textStyle: TextStyle(
-          //             fontSize: 16,
-          //             fontWeight: FontWeight.w400,
-          //             color: Colors.black))),
           Container(
             height: 52,
             margin: EdgeInsets.only(top: 8),
             padding: EdgeInsets.only(left: 14),
-            // decoration: BoxDecoration(
-            //     border: Border.all(color: Colors.grey, width: 1),
-            //     borderRadius: BorderRadius.circular(12)),
             child: Row(
               children: [
                 Expanded(

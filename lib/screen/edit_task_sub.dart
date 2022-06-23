@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_task2/models/Task.dart';
 import 'package:flutter_task2/models/notifiers.dart';
 import 'package:flutter_task2/screen/Home.dart';
@@ -9,7 +8,6 @@ import 'package:flutter_task2/widgets/Cupertino_input_field.dart';
 import 'package:flutter_task2/widgets/button.dart';
 import 'package:flutter_task2/widgets/comment_tile.dart';
 import 'package:flutter_task2/widgets/prefix_button.dart';
-import 'package:flutter_task2/widgets/sound_recorder.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +22,6 @@ class EditTaskSub extends StatefulWidget {
 }
 
 class _EditTaskSubState extends State<EditTaskSub> {
-  final recoder = SoundRecorder();
   List<Status> _statuses = [];
   String _statusValue = '';
   bool _unachieved = false;
@@ -112,46 +109,6 @@ class _EditTaskSubState extends State<EditTaskSub> {
                         readOnly: false,
                       )
                     : SizedBox.shrink(),
-                // Divider(),
-                // ExpansionTile(
-                //   title: PrefixButton(
-                //       icon: Icon(Icons.comment_outlined), text: 'Comment'),
-                //   children: [
-                //     ListView.builder(
-                //       scrollDirection: Axis.vertical,
-                //       shrinkWrap: true,
-                //       itemCount: widget.task.comments.length,
-                //       itemBuilder: (BuildContext context, int index) {
-                //         Comment comment = widget.task.comments[index];
-                //         return GestureDetector(
-                //           child: CupertinoField(
-                //               controller: commentController,
-                //               prefix: null,
-                //               expands: true,
-                //               maxlines: null,
-                //               minlines: null,
-                //               inputtype: TextInputType.multiline,
-                //               holderStyle: GoogleFonts.roboto(
-                //                   textStyle: TextStyle(
-                //                       fontSize: 17,
-                //                       fontWeight: FontWeight.w400,
-                //                       color: Colors.grey[700])),
-                //               placeHolder: comment.body,
-                //               inputAction: null,
-                //               suffix: null,
-                //               readOnly: _editMode ? false : true),
-                //           onTap: () {
-                //             _editMode = true;
-                //             setState(() {
-                //               _editMode = true;
-                //             });
-                //             print(_editMode);
-                //           },
-                //         );
-                //       },
-                //     ),
-                //   ],
-                // )
               ],
             ),
           ),

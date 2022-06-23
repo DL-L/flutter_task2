@@ -64,14 +64,6 @@ class _NewInvitationsState extends State<NewInvitations> {
                       const SizedBox(
                         height: 3.5,
                       ),
-                      // const Text("This is a sub text, use it to clarify",
-                      //     style: TextStyle(
-                      //         color: Colors.grey,
-                      //         fontSize: 12,
-                      //         fontWeight: FontWeight.w300)),
-                      // const SizedBox(
-                      //   height: 15,
-                      // ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [

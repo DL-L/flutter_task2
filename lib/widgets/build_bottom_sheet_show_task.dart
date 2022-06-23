@@ -252,41 +252,43 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
                 SizedBox(
                   height: 15,
                 ),
-                CupertinoField(
-                  controller: null,
-                  expands: false,
-                  inputtype: null,
-                  maxlines: 1,
-                  minlines: 1,
-                  placeHolder: _beforeShowTask
-                      ?
-                      // _task?.status.name == null?
-                      widget.task.status.name
-                      : _task?.status.name,
-                  prefix: Container(
-                    height: 17,
-                    width: 17,
-                    decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
-                  holderStyle: GoogleFonts.roboto(
-                      textStyle: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.blue)),
-                  inputAction: null,
-                  suffix: null,
-                  readOnly: true,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 1,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: Colors.grey[600],
-                  ),
-                ),
+                widget.isItTodo
+                    ? SizedBox.shrink()
+                    : CupertinoField(
+                        controller: null,
+                        expands: false,
+                        inputtype: null,
+                        maxlines: 1,
+                        minlines: 1,
+                        placeHolder: _beforeShowTask
+                            ? widget.task.status.name
+                            : _task?.status.name,
+                        prefix: Container(
+                          height: 17,
+                          width: 17,
+                          decoration: BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                        holderStyle: GoogleFonts.roboto(
+                            textStyle: TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.blue)),
+                        inputAction: null,
+                        suffix: null,
+                        readOnly: true,
+                      ),
+                widget.isItTodo
+                    ? SizedBox.shrink()
+                    : Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 1,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: Colors.grey[600],
+                        ),
+                      ),
                 SizedBox(
                   height: 15,
                 ),

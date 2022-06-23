@@ -174,19 +174,6 @@ class _TaskFormState extends State<TaskForm> {
                     items: widget.items,
                   )),
             ),
-            // SizedBox(
-            //   height: 400,
-            //   child: CupertinoPicker(
-            //     // looping: true,
-            //     itemExtent: 64,
-            //     onSelectedItemChanged: (index) {
-            //       setState(() {
-            //         index = index;
-            //       });
-            //     },
-            //     children: _users.map((e) => buildItem(context, e)).toList(),
-            //   ),
-            // ),
           ],
         )),
       ),
